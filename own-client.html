@@ -20,40 +20,68 @@
 </head>
 <body>
 <main>
-  <h1>Create your own OAuth client</h1>
-  <p class="tag">One time, about two minutes. This is the same model rclone uses.</p>
+  <h1>Creating your Google client</h1>
+  <p class="tag">Once, about two minutes. The same model rclone uses.</p>
 
-  <p>GDisk ships without Google credentials. Each person creates their own “Desktop app” OAuth client, so
-  there is no shared quota, no dependency on anyone else, and no “unverified app” review standing between you and
-  your own files.</p>
+  <p>GDisk does not ship with Google credentials. You create your own <em>OAuth client</em>, which means
+  no shared quota, no dependency on anyone else, and no Google review standing between you and your own
+  files. <strong>The easy way:</strong> run <code>gdisk setup</code>. It shows these steps, opens each page in your
+  browser, and checks what you paste. This page is the same thing with every screen described.</p>
+  <p>You need a Google account and a browser. Nothing here costs money.</p>
 
-  <h2>Steps</h2>
+  <h2>1. Create a project</h2>
+  <p>Open <a href="https://console.cloud.google.com/projectcreate">console.cloud.google.com/projectcreate</a>
+  (accept the Cloud Console terms if asked). Give the project any name (for example <code>gdisk</code>) and press
+  <strong>Create</strong>. Make sure the project name at the top of the page is the one you just made: everything below
+  happens inside it.</p>
+
+  <h2>2. Turn on the Google Drive API</h2>
+  <p>Open the <a href="https://console.cloud.google.com/apis/library/drive.googleapis.com">Google Drive API page</a> and
+  press <strong>Enable</strong>. It worked when the page shows &ldquo;API Enabled&rdquo; or a <strong>Manage</strong> button.</p>
+
+  <h2>3. Set up the consent screen</h2>
+  <p>Open <a href="https://console.cloud.google.com/auth/overview">Google Auth Platform</a> and press <strong>Get started</strong>:</p>
   <ol>
-    <li>Open <a href="https://console.cloud.google.com/projectcreate">Google Cloud Console → New project</a> and create a project (any name).</li>
-    <li>Open the <a href="https://console.cloud.google.com/apis/library/drive.googleapis.com">Google Drive API page</a> and click <strong>Enable</strong>.</li>
-    <li>Open <a href="https://console.cloud.google.com/auth/overview">Google Auth Platform</a> → <strong>Get started</strong>.
-      App name: anything that does not contain “Google” or “Drive”. Audience: <strong>External</strong>. Add your e-mail as contact.</li>
-    <li>Under <strong>Audience</strong>, click <strong>Publish app</strong>. Without this, Google expires the token every <strong>7 days</strong>.
-      You do not need to go through verification for personal use: the “unverified app” warning appears once at sign-in
-      (<em>Advanced → Go to … (unsafe)</em>).</li>
-    <li>Under <strong>Clients</strong>, click <strong>Create client</strong> and choose <strong>Desktop app</strong>.</li>
-    <li>Copy the <strong>Client ID</strong> and the <strong>Client secret</strong>.</li>
+    <li><strong>App information</strong>: any app name, <strong>but without the words &ldquo;Google&rdquo; or &ldquo;Drive&rdquo;</strong>
+      (Google rejects them: &ldquo;the app name does not comply&rdquo;); <code>gdisk</code> is fine. Support email: yours.</li>
+    <li><strong>Audience</strong>: <strong>External</strong>.</li>
+    <li><strong>Contact information</strong>: your email.</li>
+    <li><strong>Finish</strong>: tick the agreement to the API Services User Data Policy, <strong>Continue</strong>, <strong>Create</strong>.</li>
   </ol>
 
-  <h2>Sign in</h2>
-  <p>In the GDisk window, click <strong>Configure</strong> and paste both values. Or, in a terminal:</p>
-  <p><code>gdisk login</code></p>
-  <p>Or pass them directly: <code>gdisk login --client-id ID --client-secret SECRET</code>.
-  They are saved to <code>~/.config/gdrived/config.toml</code>, readable only by you.</p>
+  <h2>4. Publish the app</h2>
+  <p>Open <a href="https://console.cloud.google.com/auth/audience">Audience</a>, press <strong>Publish app</strong>, then
+  <strong>Confirm</strong>. While an app is in &ldquo;Testing&rdquo;, Google expires the sign-in <strong>every 7 days</strong>. You do
+  <strong>not</strong> need to send the app for verification: that is for programs distributed to the public.</p>
+
+  <h2>5. Create the client</h2>
+  <p>Open <a href="https://console.cloud.google.com/auth/clients/create">Clients &rarr; Create client</a>:
+  <em>Application type</em> <strong>Desktop app</strong>, any name, <strong>Create</strong>. A window shows the
+  <strong>Client ID</strong> (ends in <code>.apps.googleusercontent.com</code>) and the <strong>Client secret</strong>
+  (starts with <code>GOCSPX-</code>). Copy both.</p>
+
+  <h2>Using what you copied</h2>
+  <p>Run <code>gdisk setup</code> (or <code>gdisk login</code>) and paste them when asked. They are saved in
+  <code>~/.config/gdrived/config.toml</code>, readable only by you. In the window, the <strong>Set up</strong> button on the
+  first screen asks for the same two values.</p>
+
+  <h2>The one warning you will see</h2>
+  <p>At sign-in Google shows <strong>&ldquo;Google hasn&rsquo;t verified this app&rdquo;</strong>. That is expected: the &ldquo;app&rdquo; is the
+  client you just created and you are its owner. Click <strong>Advanced</strong>, then <strong>Go to <em>your app name</em>
+  (unsafe)</strong>, then <strong>Continue</strong>/<strong>Allow</strong> on the page that lists &ldquo;See, edit, create and delete all of your
+  Google Drive files&rdquo;. GDisk needs that permission because it shows your whole Drive as a folder; the login stays on
+  your computer.</p>
 
   <h2>Questions</h2>
-  <p><strong>Is it safe to keep the secret in a file?</strong> For desktop apps Google treats the client secret as
-  non-confidential (it ships inside every such app). The file is written with owner-only permissions.</p>
-  <p><strong>The token expired (<code>invalid_grant</code>).</strong> Run <code>gdisk login</code> again. If it happens
-  every 7 days, the app is still in “Testing”: go back to step 4.</p>
+  <p><strong>Is it safe to keep the secret in a file?</strong> For desktop programs Google treats the client secret as
+  non-confidential (it is inside every such program). The file is readable only by you.</p>
+  <p><strong>Another computer, or another account?</strong> Copy the ID and secret to the other computer. For another account
+  use <code>gdisk --profile NAME setup</code>.</p>
+  <p><strong>Something failed?</strong> See <a href="troubleshooting.html">Troubleshooting</a>.</p>
 
   <nav>
     <a href="./">Home</a>
+    <a href="troubleshooting.html">Troubleshooting</a>
     <a href="privacy.html">Privacy Policy</a>
     <a href="terms.html">Terms of Service</a>
   </nav>

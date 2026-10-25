@@ -26,6 +26,15 @@
   folder, using FUSE. Once mounted, you browse, open, create, edit, rename, move and delete your Drive files with
   any regular program (file manager, terminal, editor), without opening a web browser.</p>
 
+  <h2>Quick start</h2>
+  <ol>
+    <li>Install it (see the project README: Arch package, prebuilt binary, or build from source).</li>
+    <li>Run <code>gdisk setup</code>. It checks your system, walks you through creating your Google client (about two
+      minutes, once), signs you in, and mounts your Drive at <code>~/gdisk</code>.</li>
+    <li>Use <code>~/gdisk</code> like any folder. <code>gdisk</code> alone opens the window.</li>
+  </ol>
+  <p>Stuck? Run <code>gdisk doctor</code> and see <a href="troubleshooting.html">Troubleshooting</a>.</p>
+
   <h2>What it does</h2>
   <ul>
     <li><strong>Mounts your Drive</strong> as a directory. Files are downloaded on demand, only the parts you read.</li>
@@ -58,6 +67,8 @@
   including the Limited Use requirements.</p>
 
   <nav>
+    <a href="own-client.html">Create your Google client</a>
+    <a href="troubleshooting.html">Troubleshooting</a>
     <a href="privacy.html">Privacy Policy</a>
     <a href="terms.html">Terms of Service</a>
     <a href="https://github.com/tarsioonofrio/gdisk/issues">Contact / issues</a>

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GDisk — troubleshooting</title>
+<meta name="description" content="Fixes for the common GDisk problems: FUSE, sign-in, mounting and files.">
+<style>
+  :root { --bg:#fff; --fg:#1b1f23; --muted:#57606a; --link:#0b57d0; --line:#d0d7de; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#0f1318; --fg:#e6edf3; --muted:#9aa4af; --link:#8ab4f8; --line:#2b333c; } }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.6 system-ui, sans-serif; }
+  main { max-width:720px; margin:0 auto; padding:32px 16px 64px; }
+  h1 { font-size:2rem; margin:0 0 4px; } h2 { margin-top:2rem; font-size:1.25rem; }
+  .tag { color:var(--muted); margin:0 0 24px; }
+  a { color:var(--link); } nav a { margin-right:16px; }
+  nav { border-top:1px solid var(--line); margin-top:40px; padding-top:16px; }
+  code { background:rgba(127,127,127,.15); padding:1px 5px; border-radius:4px; }
+  li { margin-bottom:.5rem; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Troubleshooting</h1>
+  <p class="tag">Start with <code>gdisk doctor</code>: it checks everything and prints the fix for each problem.</p>
+
+  <h2>Installing and mounting</h2>
+  <p><strong>&ldquo;fusermount3 not found&rdquo;.</strong> Install FUSE 3: <code>sudo pacman -S fuse3</code> (Arch),
+  <code>sudo apt install fuse3</code> (Debian/Ubuntu), <code>sudo dnf install fuse3</code> (Fedora),
+  <code>sudo zypper install fuse3</code> (openSUSE).</p>
+  <p><strong>&ldquo;/dev/fuse does not exist&rdquo;.</strong> Run <code>sudo modprobe fuse</code>; reboot if it was just a kernel update.</p>
+  <p><strong>&ldquo;Transport endpoint is not connected&rdquo;.</strong> A previous run left a dead mount. <code>gdisk mount</code> cleans it up;
+  by hand: <code>fusermount3 -uz ~/gdisk</code>.</p>
+  <p><strong>&ldquo;already running&rdquo;.</strong> <code>gdisk status</code> shows it, <code>gdisk stop</code> unmounts it.
+  If you enabled start at login, the service started it.</p>
+
+  <h2>Signing in</h2>
+  <p><strong>&ldquo;Error 403: access_denied&rdquo;.</strong> Your client is still in Testing. In the Cloud Console open
+  <a href="https://console.cloud.google.com/auth/audience">Audience</a> and press <strong>Publish app</strong> (or add yourself under Test
+  users), then run <code>gdisk login</code> again.</p>
+  <p><strong>&ldquo;The app name does not comply&rdquo;.</strong> The consent screen name contains &ldquo;Google&rdquo; or &ldquo;Drive&rdquo;. Change it under
+  <a href="https://console.cloud.google.com/auth/branding">Branding</a>.</p>
+  <p><strong>&ldquo;Google hasn&rsquo;t verified this app&rdquo;.</strong> Expected: Advanced &rarr; Go to &hellip; (unsafe) &rarr; Allow.</p>
+  <p><strong><code>invalid_grant</code> / &ldquo;Session expired&rdquo;.</strong> Run <code>gdisk login</code> again. If it happens every 7 days, publish
+  the app (Audience &rarr; Publish app). It also happens after a password change or after revoking access.</p>
+  <p><strong>The browser is on another machine.</strong> Open the printed address in a browser on the same computer, or forward
+  the port shown in it over SSH.</p>
+
+  <h2>Files</h2>
+  <p><strong>Uploads stay pending.</strong> <code>gdisk status</code> shows the pending count; the log says why
+  (<code>~/.local/share/gdrived/gdrived.log</code>). They are retried and survive a reboot.</p>
+  <p><strong>A big file is not on Drive right after I copy it.</strong> Files above 8&nbsp;MiB are uploaded in the background, about
+  20 seconds after the last write, in pieces, so any size works. <code>gdisk status</code> shows <code>dirty: N</code> while uploads
+  are pending; the file is readable from <code>~/gdisk</code> meanwhile.</p>
+  <p><strong><code>name (conflito &hellip;).ext</code> appeared.</strong> The file changed on Drive while you edited it here. Your edit is
+  saved under that name; the original shows the Drive version. Keep the one you want.</p>
+  <p><strong>Google Docs/Sheets/Slides.</strong> They appear as small <code>.gdoc</code> files: open them in the browser, or run
+  <code>gdisk export FILE.gdoc --format docx</code>.</p>
+  <p><strong>I deleted something.</strong> It is in the Trash: <code>mv ~/gdisk/Trash/file ~/gdisk/Photos/</code>.</p>
+  <p><strong>&ldquo;Read-only file system&rdquo;.</strong> Shared with me, Shared drives and Trash are views; copy files out of them.</p>
+
+  <h2>Starting over</h2>
+  <p>Check <code>gdisk status</code> shows <code>dirty: 0</code>, then <code>gdisk stop</code>, <code>gdisk autostart disable</code>,
+  <code>gdisk logout</code>, <code>rm -r ~/.local/share/gdrived ~/.config/gdrived</code>, and <code>gdisk setup</code>. Nothing on Drive is deleted.</p>
+
+  <nav>
+    <a href="./">Home</a>
+    <a href="own-client.html">Create your Google client</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Terms of Service</a>
+  </nav>
+  <p class="tag">GDisk is an independent project and is not affiliated with, endorsed by, or sponsored by Google.
+  Google Drive is a trademark of Google LLC.</p>
+</main>
+</body>
+</html>
