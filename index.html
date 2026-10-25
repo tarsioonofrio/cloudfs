@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>cloudfs — mount your cloud drive on Linux</title>
-<meta name="description" content="cloudfs is a personal Linux client that mounts a Google Drive account as a local folder using FUSE.">
+<title>GDisk — mount your cloud drive on Linux</title>
+<meta name="description" content="GDisk is a personal Linux client that mounts a Google Drive account as a local folder using FUSE.">
 <style>
   :root { --bg:#fff; --fg:#1b1f23; --muted:#57606a; --link:#0b57d0; --line:#d0d7de; }
   @media (prefers-color-scheme: dark) { :root { --bg:#0f1318; --fg:#e6edf3; --muted:#9aa4af; --link:#8ab4f8; --line:#2b333c; } }
@@ -19,10 +19,10 @@
 </head>
 <body>
 <main>
-  <h1>cloudfs</h1>
+  <h1>GDisk</h1>
   <p class="tag">Your Google Drive as a normal folder on Linux.</p>
 
-  <p>cloudfs is a personal, independent Linux client that mounts a Google Drive account as a local
+  <p>GDisk is a personal, independent Linux client that mounts a Google Drive account as a local
   folder, using FUSE. Once mounted, you browse, open, create, edit, rename, move and delete your Drive files with
   any regular program (file manager, terminal, editor), without opening a web browser.</p>
 
@@ -38,29 +38,29 @@
 
   <h2>How you sign in</h2>
   <p>You run <code>gdrived login</code>, which opens the standard Google sign-in page in your browser and asks for
-  permission to access your Drive. Sign-in and consent are handled by Google; cloudfs never sees your Google
+  permission to access your Drive. Sign-in and consent are handled by Google; GDisk never sees your Google
   password. The resulting token is stored only on your own computer.</p>
 
   <h2>Your data stays on your computer</h2>
-  <p>cloudfs runs entirely on your machine. It talks directly to the Google Drive API. There is no cloudfs server:
+  <p>GDisk runs entirely on your machine. It talks directly to the Google Drive API. There is no GDisk server:
   nothing about you or your files is sent to the developer or to any third party. See the
   <a href="privacy.html">Privacy Policy</a> for details.</p>
 
   <h2>Why it asks for access to Drive</h2>
-  <p>To behave as a file system, cloudfs must list, read, create, modify, move and trash the files in your Drive,
+  <p>To behave as a file system, GDisk must list, read, create, modify, move and trash the files in your Drive,
   which requires the Google Drive scope <code>https://www.googleapis.com/auth/drive</code>. It uses that access only
   to do what you ask through the mounted folder.</p>
 
-  <p>cloudfs's use and transfer of information received from Google APIs adheres to the
+  <p>GDisk's use and transfer of information received from Google APIs adheres to the
   <a href="https://developers.google.com/terms/api-services-user-data-policy">Google API Services User Data Policy</a>,
   including the Limited Use requirements.</p>
 
   <nav>
     <a href="privacy.html">Privacy Policy</a>
     <a href="terms.html">Terms of Service</a>
-    <a href="https://github.com/tarsioonofrio/cloudfs/issues">Contact / issues</a>
+    <a href="https://github.com/tarsioonofrio/gdisk/issues">Contact / issues</a>
   </nav>
-  <p class="tag">cloudfs is an independent project and is not affiliated with, endorsed by, or sponsored by Google.
+  <p class="tag">GDisk is an independent project and is not affiliated with, endorsed by, or sponsored by Google.
   Google Drive is a trademark of Google LLC.</p>
 </main>
 </body>
