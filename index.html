@@ -37,9 +37,11 @@
   </ul>
 
   <h2>How you sign in</h2>
-  <p>You run <code>gdrived login</code>, which opens the standard Google sign-in page in your browser and asks for
+  <p>You run <code>gdisk login</code>, which opens the standard Google sign-in page in your browser and asks for
   permission to access your Drive. Sign-in and consent are handled by Google; GDisk never sees your Google
-  password. The resulting token is stored only on your own computer.</p>
+  password. The resulting token is stored only on your own computer. GDisk uses a Google OAuth client that you
+  create yourself, once, in about two minutes: see
+  <a href="own-client.html">how to create your own OAuth client</a>.</p>
 
   <h2>Your data stays on your computer</h2>
   <p>GDisk runs entirely on your machine. It talks directly to the Google Drive API. There is no GDisk server:

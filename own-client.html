@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>GDisk — create your own OAuth client</title>
+<meta name="description" content="How to create the Google OAuth client that GDisk uses to sign in to your Google Drive.">
+<style>
+  :root { --bg:#fff; --fg:#1b1f23; --muted:#57606a; --link:#0b57d0; --line:#d0d7de; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#0f1318; --fg:#e6edf3; --muted:#9aa4af; --link:#8ab4f8; --line:#2b333c; } }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.6 system-ui, sans-serif; }
+  main { max-width:720px; margin:0 auto; padding:32px 16px 64px; }
+  h1 { font-size:2rem; margin:0 0 4px; } h2 { margin-top:2rem; font-size:1.25rem; }
+  .tag { color:var(--muted); margin:0 0 24px; }
+  a { color:var(--link); } nav a { margin-right:16px; }
+  nav { border-top:1px solid var(--line); margin-top:40px; padding-top:16px; }
+  code { background:rgba(127,127,127,.15); padding:1px 5px; border-radius:4px; }
+  li { margin-bottom:.5rem; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Create your own OAuth client</h1>
+  <p class="tag">One time, about two minutes. This is the same model rclone uses.</p>
+
+  <p>GDisk ships without Google credentials. Each person creates their own “Desktop app” OAuth client, so
+  there is no shared quota, no dependency on anyone else, and no “unverified app” review standing between you and
+  your own files.</p>
+
+  <h2>Steps</h2>
+  <ol>
+    <li>Open <a href="https://console.cloud.google.com/projectcreate">Google Cloud Console → New project</a> and create a project (any name).</li>
+    <li>Open the <a href="https://console.cloud.google.com/apis/library/drive.googleapis.com">Google Drive API page</a> and click <strong>Enable</strong>.</li>
+    <li>Open <a href="https://console.cloud.google.com/auth/overview">Google Auth Platform</a> → <strong>Get started</strong>.
+      App name: anything that does not contain “Google” or “Drive”. Audience: <strong>External</strong>. Add your e-mail as contact.</li>
+    <li>Under <strong>Audience</strong>, click <strong>Publish app</strong>. Without this, Google expires the token every <strong>7 days</strong>.
+      You do not need to go through verification for personal use: the “unverified app” warning appears once at sign-in
+      (<em>Advanced → Go to … (unsafe)</em>).</li>
+    <li>Under <strong>Clients</strong>, click <strong>Create client</strong> and choose <strong>Desktop app</strong>.</li>
+    <li>Copy the <strong>Client ID</strong> and the <strong>Client secret</strong>.</li>
+  </ol>
+
+  <h2>Sign in</h2>
+  <p>In the GDisk window, click <strong>Configure</strong> and paste both values. Or, in a terminal:</p>
+  <p><code>gdisk login</code></p>
+  <p>Or pass them directly: <code>gdisk login --client-id ID --client-secret SECRET</code>.
+  They are saved to <code>~/.config/gdrived/config.toml</code>, readable only by you.</p>
+
+  <h2>Questions</h2>
+  <p><strong>Is it safe to keep the secret in a file?</strong> For desktop apps Google treats the client secret as
+  non-confidential (it ships inside every such app). The file is written with owner-only permissions.</p>
+  <p><strong>The token expired (<code>invalid_grant</code>).</strong> Run <code>gdisk login</code> again. If it happens
+  every 7 days, the app is still in “Testing”: go back to step 4.</p>
+
+  <nav>
+    <a href="./">Home</a>
+    <a href="privacy.html">Privacy Policy</a>
+    <a href="terms.html">Terms of Service</a>
+  </nav>
+  <p class="tag">GDisk is an independent project and is not affiliated with, endorsed by, or sponsored by Google.
+  Google Drive is a trademark of Google LLC.</p>
+</main>
+</body>
+</html>
